@@ -35,6 +35,12 @@ public class ProductService {
        return modelMapper.map(product,ProductDto.class);
     }
 
+    // for internal backend use
+    public Product getProductEntityById(Long id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+    }
+
     public void deleteProduct(Long id) {
         if (!productRepository.existsById(id)){
             throw new IllegalArgumentException("Student Does not exist by id: " +id);

@@ -1,5 +1,6 @@
 package com.tushar.order_management_system.config;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -18,7 +19,32 @@ public class JwtUtil {
                 .setSubject(email)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
-                .signWith(SignatureAlgorithm.HS256, SECRET)
+                .signWith(SECRET)
                 .compact();
+    }
+
+    public String extractEmail(String token){
+        return extractAllClaims(token).getSubject();
+    }
+
+    private Claims extractAllClaims(String token){
+        return Jwts.parserBuilder()
+                .setSigningKey(SECRET)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    private boolean isTokenExpired (String token){
+        return extractAllClaims(token).getExpiration().before(new Date());
+    }
+
+    public boolean isTokenValid(String token, String email){
+        try {
+            final String extractedEmail =extractEmail(token);
+            return (extractedEmail.equals(email)) && !isTokenExpired(token);
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

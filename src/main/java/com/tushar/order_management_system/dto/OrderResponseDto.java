@@ -3,14 +3,14 @@ package com.tushar.order_management_system.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductDto {
+public class OrderResponseDto {
 
-    private Long id;
-    private String productName;
-    private Double price;
-    private Integer stock;
+    public Long orderId;
+    public String Status;
+    public Double price;
 }
